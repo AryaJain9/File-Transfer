@@ -155,4 +155,4 @@ npm start       # Start normally
 
 ## License
 
-ISC
+Custom Non-Commercial License (see LICENSE file)
