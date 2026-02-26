@@ -6,3 +6,4 @@ backend/.env
 
 # Runtime/Generated files
 npm-debug.log.DS_Store
+.DS_Store
