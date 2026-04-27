@@ -153,6 +153,8 @@ npm start       # Start normally
 - **CORS**: Currently allows all origins (configure for production)
 - **File limits**: Default 5MB max; adjust `MAX_FILE_SIZE` in `.env`
 
-## License
+## 📜 License
 
-Custom Non-Commercial License (see LICENSE file)
+This project is protected under a custom license.
+
+See the [LICENSE](LICENSE) file for full details.
