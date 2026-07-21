@@ -1,7 +1,7 @@
 {
   "name": "filetransfer",
   "version": "1.0.0",
-  "description": "Backend server for filetransfer project",
+  "description": "Backend server for the File Transfer project",
   "main": "server.js",
   "type": "commonjs",
   "scripts": {
@@ -10,8 +10,8 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "Arya Jain",
+  "license": "SEE LICENSE IN LICENSE",
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^17.1.0",

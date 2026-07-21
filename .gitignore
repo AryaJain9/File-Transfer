@@ -4,6 +4,9 @@ backend/node_modules/
 # Environment/Configuration
 backend/.env
 
-# Runtime/Generated files
-npm-debug.log.DS_Store
+# Uploaded files (runtime data, not source)
+backend/uploads/
+
+# Logs / OS cruft
+npm-debug.log
 .DS_Store

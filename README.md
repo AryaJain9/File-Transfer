@@ -6,7 +6,7 @@ A simple Node.js/Express file upload and download service with a clean HTML fron
 
 - 📤 **File Upload**: Upload files via web UI
 - 📋 **File Listing**: View all uploaded files with download links
-- 🔗 **CORS Enabled**: Works from any origin
+- 🔗 **Configurable CORS**: Lock to specific origins via `.env`
 - 🚀 **Lightweight**: Minimal dependencies, easy to modify
 - ⚙️ **Configurable**: Customizable port, directory, and limits
 
@@ -45,7 +45,8 @@ npx serve -l 3000 --single   # Starts on http://localhost:3000 and http://{your-
 │   ├── routes/files.js       # File handling routes
 │   └── uploads/              # Uploaded files (created at runtime)
 ├── frontend/
-│   └── index.html            # Web UI
+│   ├── index.html            # Web UI
+│   └── user.json             # Optional: point frontend at a remote backend
 ├── .gitignore
 └── README.md
 ```
@@ -74,7 +75,7 @@ ALLOWED_ORIGINS=http://localhost:3000  # CORS allowed origins
 
 ### Frontend
 - Plain HTML/CSS/JavaScript (no build tools)
-- Fetches configuration from backend
+- Reads `frontend/user.json` to optionally target a remote backend
 - Handles multipart file uploads
 - Lists files with direct download links
 
@@ -150,11 +151,15 @@ npm start       # Start normally
 - **No authentication**: Anyone with access can upload/download
 - **File naming**: Timestamps prevent filename conflicts
 - **Git ignored**: `backend/node_modules/`, `backend/.env`, `backend/uploads/`
-- **CORS**: Currently allows all origins (configure for production)
+- **CORS**: Restricted to `ALLOWED_ORIGINS` when set in `.env`; allows all origins if unset
 - **File limits**: Default 5MB max; adjust `MAX_FILE_SIZE` in `.env`
 
 ## 📜 License
 
 This project is protected under a custom license.
 
+<<<<<<< HEAD
 See the [LICENSE](LICENSE) file for full details.
+=======
+See the [LICENSE](LICENSE) file for full details.
+>>>>>>> 8e80096 (Fix frontend backend-URL config and LAN-aware CORS)

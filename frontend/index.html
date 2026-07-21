@@ -40,27 +40,49 @@ npx serve -l 3000 --single
   <ul id="fileList"></ul>
 
   <script>
-    // Determine backend URL. The user can edit the root-level user.json file
-    // (same directory as this frontend folder) and set an `ip` field. If that
-    // value is non-empty we'll use it; otherwise default to localhost.
-    let BACKEND_URL = 'http://localhost:8000';
-    console.log('Initial BACKEND_URL:', BACKEND_URL);
-    fetch(`${BACKEND_URL}/user.json`)
-      .then(r => r.json())
+    // Backend location. Edit `frontend/user.json` and set the `ip` field to
+    // point this page at a backend on another machine. All of these work:
+    //   "192.168.1.20"            -> http://192.168.1.20:8000  (port defaulted)
+    //   "192.168.1.20:9000"       -> http://192.168.1.20:9000
+    //   "http://192.168.1.20:8000"-> used as-is
+    // Leave it empty to use localhost.
+    //
+    // NOTE: user.json is served alongside this page, NOT by the backend --
+    // fetching it from the backend would mean already knowing the backend URL.
+    const DEFAULT_PORT = 8000;
+    let BACKEND_URL = `http://localhost:${DEFAULT_PORT}`;
+
+    // Turn whatever the user typed into a usable origin.
+    function buildBackendUrl(raw) {
+      let value = String(raw).trim().replace(/\/+$/, ''); // drop trailing slashes
+      if (!value) return null;
+      if (!/^https?:\/\//i.test(value)) value = `http://${value}`;
+      const url = new URL(value);
+      if (!url.port && url.protocol === 'http:') url.port = DEFAULT_PORT;
+      return url.origin;
+    }
+
+    // Kick everything off once we know where the backend lives.
+    const ready = fetch('./user.json')
+      .then(r => (r.ok ? r.json() : {}))
       .then(cfg => {
-        if (cfg.ip && cfg.ip.trim()) {
-          BACKEND_URL = `http://${cfg.ip.trim()}`;
-          console.log('Updated BACKEND_URL from user.json:', BACKEND_URL);
-        }
-        loadFiles(); // Load files after determining URL
+        const resolved = cfg && cfg.ip ? buildBackendUrl(cfg.ip) : null;
+        if (resolved) BACKEND_URL = resolved;
       })
       .catch(err => {
-        console.warn('Could not fetch user.json, using default:', err);
-        loadFiles(); // Continue with default
+        console.warn('Could not read user.json, using default:', err);
+      })
+      .then(() => {
+        console.log('BACKEND_URL:', BACKEND_URL);
+        loadFiles();
       });
 
 
     async function upload() {
+      // If the user clicks before user.json has loaded, wait for it -- otherwise
+      // the upload would fire at localhost even though an ip is configured.
+      await ready;
+
       const file = document.getElementById('fileInput').files[0];
       if (!file) return alert('Select a file first.');
 
