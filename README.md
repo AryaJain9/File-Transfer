@@ -15,7 +15,7 @@ A simple Node.js/Express file upload and download service with a clean HTML fron
 
 ### Prerequisites
 
-- Node.js (v14 or later)
+- Node.js (v18 or later)
 - npm (comes with Node.js)
 
 ### Setup
@@ -23,6 +23,7 @@ A simple Node.js/Express file upload and download service with a clean HTML fron
 **Backend (Terminal 1):**
 ```bash
 cd backend
+cp .env.example .env
 npm install
 npm run dev        # Starts on http://localhost:8000
 ```
@@ -40,7 +41,7 @@ npx serve -l 3000 --single   # Starts on http://localhost:3000 and http://{your-
 ```
 .
 ├── backend/
-│   ├── .env                  # Configuration
+│   ├── .env.example          # Copy to .env and edit
 │   ├── package.json
 │   ├── server.js             # Express server
 │   ├── routes/files.js       # File handling routes
@@ -54,7 +55,14 @@ npx serve -l 3000 --single   # Starts on http://localhost:3000 and http://{your-
 
 ## Configuration
 
-Edit `backend/.env`:
+Copy the sample config and edit it:
+
+```bash
+cd backend
+cp .env.example .env
+```
+
+`.env` is gitignored, so each machine gets its own:
 
 ```env
 PORT=8000                          # Server port
