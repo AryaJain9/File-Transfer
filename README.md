@@ -1,6 +1,6 @@
 # File Transfer App
 
-A simple Node.js/Express file upload and download service with a clean HTML frontend. Built for moving files between machines on a local network — laptop to phone, desktop to laptop — without a cloud service in the middle.
+A simple Node.js/Express file upload and download service with a clean HTML frontend. Built for moving files between machines on a local network - laptop to phone, desktop to laptop - without a cloud service in the middle.
 
 ## Features
 
@@ -153,8 +153,8 @@ npm start       # Start normally
 ### "No 'Access-Control-Allow-Origin' header" in the console
 The backend rejected your frontend's origin. Check the backend startup line:
 
-- `🔒 CORS restricted to: ...` — `ALLOWED_ORIGINS` is set and your origin isn't on the list. Add it, or comment the variable out to allow any LAN origin.
-- `🌐 CORS: allowing any local network origin` — your origin isn't a private address, which is unusual for local use.
+- `🔒 CORS restricted to: ...` - `ALLOWED_ORIGINS` is set and your origin isn't on the list. Add it, or comment the variable out to allow any LAN origin.
+- `🌐 CORS: allowing any local network origin` - your origin isn't a private address, which is unusual for local use.
 
 `.env` is read once at startup, so restart the server after editing it.
 
