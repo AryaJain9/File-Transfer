@@ -129,7 +129,7 @@ Response:
 ["1708946123456-file1.txt", "1708946124567-file2.pdf"]
 ```
 
-### GET /uploads/<filename>
+### GET `/uploads/<filename>`
 Download a file directly via the browser or curl
 
 ## npm Scripts
