@@ -1,11 +1,12 @@
 # File Transfer App
 
-A simple Node.js/Express file upload and download service with a clean HTML frontend.
+A simple Node.js/Express file upload and download service with a clean HTML frontend. Built for moving files between machines on a local network — laptop to phone, desktop to laptop — without a cloud service in the middle.
 
 ## Features
 
 - 📤 **File Upload**: Upload files via web UI
 - 📋 **File Listing**: View all uploaded files with download links
+- 🌐 **LAN Ready**: Works across devices on the same network out of the box
 - 🔗 **Configurable CORS**: Lock to specific origins via `.env`
 - 🚀 **Lightweight**: Minimal dependencies, easy to modify
 - ⚙️ **Configurable**: Customizable port, directory, and limits
@@ -59,8 +60,23 @@ Edit `backend/.env`:
 PORT=8000                          # Server port
 UPLOAD_DIR=uploads                 # File storage directory
 MAX_FILE_SIZE=5242880              # Max file size (bytes, 5MB default)
-ALLOWED_ORIGINS=http://localhost:3000  # CORS allowed origins
+
+# Optional. Leave unset to accept any local-network origin (localhost, LAN IPs).
+# Set it to lock the API to specific frontends, comma separated:
+# ALLOWED_ORIGINS=http://localhost:3000,http://192.168.1.20:3000
 ```
+
+### Pointing the frontend at another machine
+
+Edit `frontend/user.json` to reach a backend that isn't on localhost:
+
+```json
+{ "ip": "192.168.1.20" }
+```
+
+Port 8000 is assumed if you omit it. `"192.168.1.20:9000"` and `"http://192.168.1.20:9000"` also work. Leave `ip` empty to use localhost.
+
+To use it from a phone: set `ip` to the host machine's LAN address, serve the frontend, then open `http://{host-ip}:3000` on the phone. Both devices must be on the same network, and your firewall may prompt to allow Node the first time.
 
 ## How It Works
 
@@ -120,11 +136,19 @@ npm start       # Start normally
 
 ## Troubleshooting
 
-### Upload fails  
+### Upload fails
 - Check backend is running: `http://localhost:8000`
 - Open browser console (F12) for error details
-- Verify `ALLOWED_ORIGINS` includes your frontend URL
 - Check file size against `MAX_FILE_SIZE` limit
+- If you set `ALLOWED_ORIGINS`, it must list the exact origin shown in the browser address bar (scheme, host, and port). The backend prints its CORS mode on startup.
+
+### "No 'Access-Control-Allow-Origin' header" in the console
+The backend rejected your frontend's origin. Check the backend startup line:
+
+- `🔒 CORS restricted to: ...` — `ALLOWED_ORIGINS` is set and your origin isn't on the list. Add it, or comment the variable out to allow any LAN origin.
+- `🌐 CORS: allowing any local network origin` — your origin isn't a private address, which is unusual for local use.
+
+`.env` is read once at startup, so restart the server after editing it.
 
 ### Files don't appear
 - Check backend terminal for upload messages
@@ -148,18 +172,23 @@ npm start       # Start normally
 ## Notes
 
 - **No database**: Files stored on filesystem only
-- **No authentication**: Anyone with access can upload/download
 - **File naming**: Timestamps prevent filename conflicts
 - **Git ignored**: `backend/node_modules/`, `backend/.env`, `backend/uploads/`
-- **CORS**: Restricted to `ALLOWED_ORIGINS` when set in `.env`; allows all origins if unset
+- **CORS**: Restricted to `ALLOWED_ORIGINS` when set in `.env`; otherwise any local network origin is allowed
 - **File limits**: Default 5MB max; adjust `MAX_FILE_SIZE` in `.env`
+
+## ⚠️ Security
+
+This is a LAN utility, not a public file host. Known limitations, by design:
+
+- **No authentication.** Anyone who can reach the server can upload and download.
+- **No file type validation.** Uploads are stored as sent; only the 5MB size cap applies.
+- **CORS is not access control.** It stops other websites from calling this API through your browser. It does not stop someone requesting the URL directly.
+
+Run it on a network you trust. Before exposing it anywhere else, add authentication, set `ALLOWED_ORIGINS`, and validate uploads.
 
 ## 📜 License
 
 This project is protected under a custom license.
 
-<<<<<<< HEAD
 See the [LICENSE](LICENSE) file for full details.
-=======
-See the [LICENSE](LICENSE) file for full details.
->>>>>>> 8e80096 (Fix frontend backend-URL config and LAN-aware CORS)
